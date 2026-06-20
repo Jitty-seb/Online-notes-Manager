@@ -3,6 +3,7 @@ import { useState } from "react";
 function NoteForm({ addNote }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [subject, setSubject] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -12,10 +13,11 @@ function NoteForm({ addNote }) {
       return;
     }
 
-    addNote({ title, content });
+    addNote({ title, content, subject });
 
     setTitle("");
     setContent("");
+    setSubject("");
   };
 
   return (
@@ -25,6 +27,13 @@ function NoteForm({ addNote }) {
         placeholder="Enter Title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+      />
+
+      <input
+        type="text"
+        placeholder="Enter Subject (e.g. DBMS, Maths)"
+        value={subject}
+        onChange={(e) => setSubject(e.target.value)}
       />
 
       <textarea

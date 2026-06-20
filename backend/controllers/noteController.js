@@ -14,16 +14,16 @@ const getNotes = async (req, res) => {
 
 // Create Note
 const createNote = async (req, res) => {
-  const { title, content } = req.body;
+  const { title, content, subject } = req.body;
 
   const note = await Note.create({
     title,
     content,
+    subject,
   });
 
   res.status(201).json(note);
 };
-
 // Update Note
 const updateNote = async (req, res) => {
   const note = await Note.findByIdAndUpdate(

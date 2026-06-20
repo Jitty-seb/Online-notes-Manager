@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "./services/api";
 import NoteForm from "./components/NoteForm";
+import { downloadNoteAsPDF } from "./utils/generatePDF";
 import "./App.css";
 
 function App() {
@@ -8,6 +9,7 @@ function App() {
   const [editingId, setEditingId] = useState(null);
   const [editTitle, setEditTitle] = useState("");
   const [editContent, setEditContent] = useState("");
+  const [editSubject, setEditSubject] = useState("");
 
   const fetchNotes = async () => {
     const res = await API.get("/");
@@ -32,12 +34,14 @@ function App() {
     setEditingId(note._id);
     setEditTitle(note.title);
     setEditContent(note.content);
+    setEditSubject(note.subject || "");
   };
 
   const updateNote = async (id) => {
     await API.put(`/${id}`, {
       title: editTitle,
       content: editContent,
+      subject: editSubject,
     });
 
     setEditingId(null);
@@ -46,7 +50,9 @@ function App() {
 
   return (
     <div className="container">
-      <h1>📝 Notes App</h1>
+      <h1>📚 Exam Resource Manager</h1>
+
+      <p className="meta">Total Resources: {notes.length}</p>
 
       <NoteForm addNote={addNote} />
 
@@ -60,6 +66,11 @@ function App() {
                   onChange={(e) => setEditTitle(e.target.value)}
                 />
 
+                <input
+                  value={editSubject}
+                  onChange={(e) => setEditSubject(e.target.value)}
+                />
+
                 <textarea
                   value={editContent}
                   onChange={(e) => setEditContent(e.target.value)}
@@ -71,7 +82,20 @@ function App() {
               </>
             ) : (
               <>
+                <p
+                  style={{
+                    fontSize: "0.75rem",
+                    color: "#999",
+                    textAlign: "left",
+                    marginBottom: "4px",
+                  }}
+                >
+                  Created: {new Date(note.createdAt).toLocaleDateString()}
+                </p>
+
                 <h2>{note.title}</h2>
+
+                <p className="meta">{note.subject || "General"}</p>
 
                 <p>{note.content}</p>
 
@@ -85,6 +109,10 @@ function App() {
                     onClick={() => deleteNote(note._id)}
                   >
                     Delete
+                  </button>
+
+                  <button onClick={() => downloadNoteAsPDF(note)}>
+                    Download PDF
                   </button>
                 </div>
               </>
