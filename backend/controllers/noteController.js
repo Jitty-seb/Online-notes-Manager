@@ -19,7 +19,7 @@ const createNote = async (req, res) => {
   const note = await Note.create({
     title,
     content,
-    subject,
+    subject
   });
 
   res.status(201).json(note);

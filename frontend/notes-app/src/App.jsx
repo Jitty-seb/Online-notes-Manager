@@ -50,9 +50,9 @@ function App() {
 
   return (
     <div className="container">
-      <h1>📚 Exam Resource Manager</h1>
+      <h1>📚 Online notes Manager</h1>
 
-      <p className="meta">Total Resources: {notes.length}</p>
+      <p className="meta">Total Notes: {notes.length}</p>
 
       <NoteForm addNote={addNote} />
 
